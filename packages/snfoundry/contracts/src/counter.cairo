@@ -1,5 +1,5 @@
 #[starknet::interface]
-trait ICounter<T> {
+pub trait ICounter<T> {
     fn get_counter(self: @T) -> u32;
     fn increase_counter(ref self: T);
     fn decrease_counter(ref self: T);
@@ -8,7 +8,7 @@ trait ICounter<T> {
 }
 
 #[starknet::contract]
-mod CounterContract {
+pub mod CounterContract {
     use OwnableComponent::InternalTrait;
 use super::ICounter;
     use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
@@ -24,7 +24,7 @@ use super::ICounter;
 
     #[event]
     #[derive(Drop, starknet::Event)]
-    enum Event {
+    pub enum Event {
         CounterIncreased: CounterIncreased,
         CounterDecreased: CounterDecreased,
         CounterChanged: CounterChanged,
@@ -33,25 +33,25 @@ use super::ICounter;
     }
 
     #[derive(Drop, starknet::Event)]
-    struct CounterIncreased {
+    pub struct CounterIncreased {
         #[key]
-        caller: ContractAddress,
-        new_value: u32,
+        pub caller: ContractAddress,
+        pub new_value: u32,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct CounterDecreased {
+    pub struct CounterDecreased {
         #[key]
-        caller: ContractAddress,
-        new_value: u32,
+        pub caller: ContractAddress,
+        pub new_value: u32,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct CounterChanged {
+    pub struct CounterChanged {
         #[key]
-        caller: ContractAddress,
-        old_value: u32,
-        new_value: u32,
+        pub caller: ContractAddress,
+        pub old_value: u32,
+        pub new_value: u32,
     }
 
     #[storage]
