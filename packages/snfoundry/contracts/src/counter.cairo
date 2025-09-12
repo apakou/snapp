@@ -10,11 +10,12 @@ pub trait ICounter<T> {
 #[starknet::contract]
 pub mod CounterContract {
     use OwnableComponent::InternalTrait;
-use super::ICounter;
+    use super::ICounter;
     use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
     use starknet::{get_caller_address, get_contract_address, ContractAddress};
     use openzeppelin_access::ownable::OwnableComponent;
     use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use contracts::utils::{ strk_address, strk_to_fri };
 
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
 
@@ -112,8 +113,8 @@ use super::ICounter;
         }
 
         fn reset_counter(ref self: ContractState) {
-            let payment_amount: u256 = 1000000000000000000;
-            let strk_token: ContractAddress = 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d.try_into().unwrap();
+            let payment_amount: u256 = strk_to_fri(1);
+            let strk_token: ContractAddress = strk_address();
             
             let caller = get_caller_address();
             let contract = get_contract_address();
@@ -129,7 +130,6 @@ use super::ICounter;
             let success: bool = dispatcher.transfer_from(caller, owner, payment_amount);
             assert!(success, "STRK transfer failed");
 
-            self.ownable.assert_only_owner();
             let old_counter = self.counter.read();
             self.counter.write(0);
             
