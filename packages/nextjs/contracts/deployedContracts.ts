@@ -7,16 +7,16 @@ const deployedContracts = {
   devnet: {
     CounterContract: {
       address:
-        "0x5d92797684a6762ef35d5b01c9335e0f7c179f68aef96fdbb1c982d42b1bb81",
+        "0x328e0cd9bf468396a98a3489743ab8007cd944613c78cb091bbd0300c79dbd0",
       abi: [
         {
           type: "impl",
           name: "CounterImpl",
-          interface_name: "contracts::CounterContract::ICounter",
+          interface_name: "contracts::counter::ICounter",
         },
         {
           type: "interface",
-          name: "contracts::CounterContract::ICounter",
+          name: "contracts::counter::ICounter",
           items: [
             {
               type: "function",
@@ -121,7 +121,7 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "contracts::CounterContract::CounterContract::CounterIncreased",
+          name: "contracts::counter::CounterContract::CounterIncreased",
           kind: "struct",
           members: [
             {
@@ -138,7 +138,7 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "contracts::CounterContract::CounterContract::CounterDecreased",
+          name: "contracts::counter::CounterContract::CounterDecreased",
           kind: "struct",
           members: [
             {
@@ -155,7 +155,7 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "contracts::CounterContract::CounterContract::CounterChanged",
+          name: "contracts::counter::CounterContract::CounterChanged",
           kind: "struct",
           members: [
             {
@@ -228,22 +228,22 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "contracts::CounterContract::CounterContract::Event",
+          name: "contracts::counter::CounterContract::Event",
           kind: "enum",
           variants: [
             {
               name: "CounterIncreased",
-              type: "contracts::CounterContract::CounterContract::CounterIncreased",
+              type: "contracts::counter::CounterContract::CounterIncreased",
               kind: "nested",
             },
             {
               name: "CounterDecreased",
-              type: "contracts::CounterContract::CounterContract::CounterDecreased",
+              type: "contracts::counter::CounterContract::CounterDecreased",
               kind: "nested",
             },
             {
               name: "CounterChanged",
-              type: "contracts::CounterContract::CounterContract::CounterChanged",
+              type: "contracts::counter::CounterContract::CounterChanged",
               kind: "nested",
             },
             {
@@ -255,7 +255,7 @@ const deployedContracts = {
         },
       ],
       classHash:
-        "0x4de336a35ae9cb714e1d0dce101df42d04c98cb3efc75efd2be1b0fb7ce646f",
+        "0x122e3c96ef9f130b25590d8111fd935004db324e423769681790fc2d418e0fa",
     },
   },
 } as const;

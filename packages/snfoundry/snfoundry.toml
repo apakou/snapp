@@ -1,0 +1,15 @@
+[profile.default]
+sierra-replace-ids = true
+
+[dependencies]
+starknet = "2.8.2"
+openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", tag = "v0.17.0" }
+
+[sncast.devnet]
+url = "http://localhost:5050"
+account = "devnet-account"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+
+[sncast.sepolia]
+url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
+account = "sepolia"
