@@ -10,11 +10,14 @@ const withPWA = nextPWA({
 });
 
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   reactStrictMode: true,
   logging: {
     incomingRequests: false,
   },
   images: {
+    unoptimized: true,
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {

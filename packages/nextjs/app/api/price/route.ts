@@ -1,3 +1,6 @@
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every hour
+
 export async function GET(_: Request) {
   const apiUrl =
     "https://api.coingecko.com/api/v3/simple/price?ids=starknet&vs_currencies=usd";
