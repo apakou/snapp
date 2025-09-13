@@ -38,6 +38,15 @@ export const Counter = () => {
     args: [parseInt(newValue) || 0],
   });
 
+  const {
+    sendAsync: resetCounter,
+    isPending: isResetting,
+  } = useScaffoldWriteContract({
+    contractName: "CounterContract",
+    functionName: "reset_counter",
+    args: [],
+  });
+
   const handleIncrease = async () => {
     try {
       await increaseCounter();
@@ -81,6 +90,38 @@ export const Counter = () => {
     }
   };
 
+  const handleResetCounter = async () => {
+    const confirmReset = confirm(
+      "⚠️ Reset Counter requires payment of 1 STRK token.\n\n" +
+      "This will:\n" +
+      "• Reset counter to 0\n" +
+      "• Transfer 1 STRK from your wallet to the contract owner\n" +
+      "• Requires sufficient STRK balance and approval\n\n" +
+      "Do you want to continue?"
+    );
+
+    if (!confirmReset) return;
+
+    try {
+      await resetCounter();
+      // Refetch the counter value after successful transaction
+      setTimeout(() => refetch(), 2000);
+    } catch (error) {
+      console.error("Error resetting counter:", error);
+      const errorMessage = (error as any)?.message || error?.toString() || "Unknown error";
+      
+      if (errorMessage.includes("Insufficient STRK balance")) {
+        alert("❌ Insufficient STRK balance. You need at least 1 STRK token to reset the counter.");
+      } else if (errorMessage.includes("Insufficient STRK allowance")) {
+        alert("❌ Insufficient STRK allowance. Please approve the contract to spend 1 STRK token first.");
+      } else if (errorMessage.includes("STRK transfer failed")) {
+        alert("❌ STRK transfer failed. Please check your wallet and try again.");
+      } else {
+        alert(`❌ Error resetting counter: ${errorMessage}`);
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center p-6 bg-base-100 rounded-lg shadow-lg">
@@ -120,7 +161,7 @@ export const Counter = () => {
         <button 
           className={`btn btn-success ${isIncreasing ? 'loading' : ''}`}
           onClick={handleIncrease}
-          disabled={isIncreasing || isDecreasing || isSetting}
+          disabled={isIncreasing || isDecreasing || isSetting || isResetting}
         >
           {isIncreasing ? (
             <>
@@ -146,7 +187,7 @@ export const Counter = () => {
         <button 
           className={`btn btn-warning ${isDecreasing ? 'loading' : ''}`}
           onClick={handleDecrease}
-          disabled={isIncreasing || isDecreasing || isSetting}
+          disabled={isIncreasing || isDecreasing || isSetting || isResetting}
         >
           {isDecreasing ? (
             <>
@@ -179,13 +220,13 @@ export const Counter = () => {
             className="input input-bordered input-sm flex-1"
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
-            disabled={isIncreasing || isDecreasing || isSetting}
+            disabled={isIncreasing || isDecreasing || isSetting || isResetting}
             min="0"
           />
           <button 
             className={`btn btn-primary btn-sm ${isSetting ? 'loading' : ''}`}
             onClick={handleSetCounter}
-            disabled={isIncreasing || isDecreasing || isSetting || !newValue}
+            disabled={isIncreasing || isDecreasing || isSetting || isResetting || !newValue}
           >
             {isSetting ? (
               <>
@@ -210,6 +251,38 @@ export const Counter = () => {
         </div>
         <p className="text-xs text-gray-400 mt-1 text-center">
           ⚠️ Owner only function
+        </p>
+      </div>
+
+      {/* Reset Counter Section */}
+      <div className="w-full max-w-xs mb-4">
+        <button 
+          className={`btn btn-error btn-sm w-full ${isResetting ? 'loading' : ''}`}
+          onClick={handleResetCounter}
+          disabled={isIncreasing || isDecreasing || isSetting || isResetting}
+        >
+          {isResetting ? (
+            <>
+              <span className="loading loading-spinner loading-xs"></span>
+              Resetting...
+            </>
+          ) : (
+            <>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-4 w-4 mr-2" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              💰 Reset Counter (1 STRK)
+            </>
+          )}
+        </button>
+        <p className="text-xs text-gray-400 mt-1 text-center">
+          💸 Requires 1 STRK token payment
         </p>
       </div>
 
